@@ -1,10 +1,13 @@
 # Load and Run TSP code from Python
 
-This directory holds code examples for loading TSP
+This directory holds code example for loading TSP
 functions from a TSP file and then using them from Python.
+Typically, the TSP file is written/debugged/tested using TSP Toolkit.
 
-The script performs an IDVD on MOSFET using two 2450 SourceMeter.
-Consult User Manual for DUT connection and TSPLINK Node number configurations.
+The example performs an IDVD on MOSFET using two 2450 SourceMeter.
+It also measured the gate leakage current for each Vds-Ids point.
+
+Consult 2450 User Manual for DUT connection and TSPLINK Node number configurations.
 
 Computer running Python connects to node 1 = Gate
 TSPLINK to node 2 = Drain
@@ -13,51 +16,49 @@ TSPLINK to node 2 = Drain
 
 [comment]: **[Instrument](./directory)**  
 
-* **[TSP Function Defining](./current_sine_wave_define.tsp)**  
-This TSP file defines some helper functions for creation of a sine wave of current.
+* **[TSP Function Defining](./IDVD_meas_Igs.tsp)**  
+This TSP file defines some helper functions.
 
-* **[TSP Function Using](./current_sine_wave_use.tsp)**  
-This TSP file demos how to pass parameter values and use the sine wave generation functions.
+* **[Python for loading and Using TSP Functions](./run_IDVD_meas_Igs.py)**  
+This Python shows how to load a script from a tsp file and then make use of the functions.
+The TSP will cause the instrument to assert SRQ at test completion.
+The Python shows how to loop on the status byte (VISA Read_STB()) until SRQ is detected.
+Then it asks for the data, places it into a dataframe and plots IDVD.
 
 
 ## Code Walk Through
 
 The Defining file contains instrumnet commands orgainized into functions.
-When this file is run on the 2450, it may seem like nothing happened.
-When running the code in this file, it loads the functions into runtime memory.
+When this file is run on the 2450, it loads the functions into runtime memory.
+The actual IV test will not be performed until you call your run_test() function.
 These functions are essentially your API for the task you need the 2450 to do.
 
-![define functions](images/define_functions.png)
+![define functions](images/TSP_functions_list.png)
 
 Below is some detail of one of the functions.  It is defined to use paramters.
-For example, the value of src_level is used to set the current source range.
-The voltage_limit is used to set both the vlimit and the voltage measure range.
+For example, the voltage levels for the gate and drain are passed in table variables.
+Also a parameter for some sweep delay has been defined.
+The IDVD family of curves is carried out by nested for/next loops that run
+in the TSP runtime engine on the 2450 instruments.  This results in fast test time.
 
-![define functions](images/define_detail.png)
-
-
-Below is part of the using TSP file.  It defines some variables and passes those values to the function.
-It also can implement some conditional logic such as the if/then on build_list.
-If you choose to move to Python or another programming language, this file approximates how
-Python would make use of the defined functions.
-
-![define functions](images/use_functions.png)
+![define functions](images/TSP_function_detail.png)
 
 
-Below shows the outcome when connected to a 330Ω resistor.
-The TSP files can be brought to the instrument on a thumb drive.
-Touch the screen where it displays 'No Script'.  This will give a pop-up list
-of available scripts on thumb drive or stored on the instrument.
-Run the current_sine_wave_define.tsp once.
-Then run the current_sine_wave_use.tsp to generate the sine wave of current.
-To run again without any value changes, press TRIG button to execute it again.
+Below is part of the Python code.  The VISA write are invoking the TSP functions to carry out the test.
+In this case, we just have a run_test() function which will carry out the task on the instrument.
+After the SRQ is detected, we call the print_results() function and read the results.
 
-![define functions](images/outcome.png)
+![define functions](images/Python_Use_TSP_functions.png)
+
+
+Below shows the outcome for IDVD on SD210 nFET
+
+![define functions](images/IDVD_2450.png)
 
 The TSP code can also be run from TSP Toolkit extension for VSCode.
 In this case, the data results can be spooled to the Terminal window of TSP Toolkit.
 
-![define functions](images/run_tsp_toolkit.png)
+
 
 
 
