@@ -1,6 +1,13 @@
 
 # Measuring I-V Characteristics of FETs
 
+These examples include those found in the User Manual, Application Notes, and other sources. 
+
+## Directory
+
+* **[Raw Socket Python 3.x ](./raw_socket_IDVD_samples)**  
+See the description within the lower directory. 
+
 This example application demonstrates how to use two Model 2450 instruments to perform I-V
 characterization of field effect transistors (FETs). The Model 2450 is a good choice for semiconductor
 device testing because it can quickly and accurately source and measure both current and voltage.
@@ -19,3 +26,8 @@ circuits.
 You will find examples for both the SPCI and the TSP command set implementations. 
 * Each is written in Python 3
 * Each uses sockets-based communications to control the SourceMeter
+
+* **[IDVD Family of Curves User Manual Samples](./IDVD_Family_Curves_User_Manual_Samples)**  
+
+
+* **[Python Sample to load TSP Script file and Run It](./Load_and_Run_TSP_code_from_Python)**  
