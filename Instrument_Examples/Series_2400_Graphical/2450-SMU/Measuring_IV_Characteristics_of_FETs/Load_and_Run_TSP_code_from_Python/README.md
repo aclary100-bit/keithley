@@ -1,11 +1,11 @@
 # Load and Run TSP code from Python
 
-This directory holds code example for loading TSP
+This directory holds a code example for loading TSP
 functions from a TSP file and then using them from Python.
 Typically, the TSP file is written/debugged/tested using TSP Toolkit.
 
 The example performs an IDVD on MOSFET using two 2450 SourceMeter.
-It also measured the gate leakage current for each Vds-Ids point.
+It also measures the gate leakage current for each Vds-Ids point.
 
 Consult 2450 User Manual for DUT connection and TSPLINK Node number configurations.
 
@@ -17,7 +17,9 @@ TSPLINK to node 2 = Drain
 [comment]: **[Instrument](./directory)**  
 
 * **[TSP Function Defining](./IDVD_meas_Igs.tsp)**  
-This TSP file defines some helper functions.
+This TSP file defines some helper functions.  You only need to load the functions
+into the 2450 runtime memory once per session.  If you reboot the 2450, then load it again.
+
 
 * **[Python for loading and Using TSP Functions](./run_IDVD_meas_Igs.py)**  
 This Python shows how to load a script from a tsp file and then make use of the functions.
@@ -28,7 +30,7 @@ Then it asks for the data, places it into a dataframe and plots IDVD.
 
 ## Code Walk Through
 
-The Defining file contains instrumnet commands orgainized into functions.
+The Defining file contains instrument commands orgainized into functions.
 When this file is run on the 2450, it loads the functions into runtime memory.
 The actual IV test will not be performed until you call your run_test() function.
 These functions are essentially your API for the task you need the 2450 to do.
@@ -44,9 +46,10 @@ in the TSP runtime engine on the 2450 instruments.  This results in fast test ti
 ![define functions](images/TSP_function_detail.png)
 
 
-Below is part of the Python code.  The VISA write are invoking the TSP functions to carry out the test.
-In this case, we just have a run_test() function which will carry out the task on the instrument.
-After the SRQ is detected, we call the print_results() function and read the results.
+Below is part of the Python code.  In this case, we have defined a Python function that will 
+run the test and fetch the results at test completion.
+The VISA write are invoking the TSP functions to carry out the test.
+
 
 ![define functions](images/Python_Use_TSP_functions.png)
 
